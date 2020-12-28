@@ -13,12 +13,21 @@
     <!-- breadcrumb -->
 @endsection
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- row -->
     <div class="row w-50">
         <div class="col w-50">
             <br>
             <hr>
-        <form method="post" action="{{route('roles.store')}}">
+        <form method="post" action="{{route('roles.store',app()->getLocale())}}">
             @csrf
             @if(isset($role))
                 <input type="hidden" name="id" value="{{$role->id}}">

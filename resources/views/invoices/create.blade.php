@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
 @endsection
 @section('title')
-    {{isset($invoice) ? 'تعديل الفاتورة' : 'اضافة فاتورة'}}
+    {{isset($invoice) ? __('edit invoice') : __('add invoice')}}
 @stop
 
 @section('page-header')
@@ -20,8 +20,8 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                   {{isset($invoice) ? 'تعديل الفاتورة' : 'اضافة فاتورة'}}</span>
+                <h4 class="content-title mb-0 my-auto">{{__('invoices')}}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                   {{isset($invoice) ? __('edit invoice') : __('add invoice')}}</span>
             </div>
         </div>
     </div>
@@ -34,8 +34,16 @@
         <div class="col -12">
             <div class="card">
                 <div class="card-body">
-
-                    <form action="{{route('invoices.store')}}" method="post" enctype="multipart/form-data"
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <form action="{{route('invoices.store',app()->getLocale())}}" method="post" enctype="multipart/form-data"
                           autocomplete="off">
                         {{ csrf_field() }}
 
@@ -44,7 +52,7 @@
                         <div class="row">
 
                             <div class="col">
-                                <label for="inputName" class="control-label">رقم الفاتورة</label>
+                                <label for="inputName" class="control-label">{{__('num')}}</label>
                                 <input type="text" class="form-control" id="inputName" name="invoice_number"
                                        title="يرجي ادخال رقم الفاتورة" required
                                 value=" {{isset($invoice) ? $invoice->invoice_number : ''}}"
@@ -52,7 +60,7 @@
                             </div>
 
                             <div class="col">
-                                <label>تاريخ الفاتورة</label>
+                                <label>{{__('invoice date')}}</label>
                                 <input class="form-control fc-datepicker fc-today" name="invoice_date" placeholder="YYYY-MM-DD"
                                        type="text" required
                                        value=" {{isset($invoice) ? $invoice->invoice_date : ''}}"
@@ -60,7 +68,7 @@
                             </div>
 
                             <div class="col">
-                                <label>تاريخ الاستحقاق</label>
+                                <label>{{__('due date')}}</label>
                                 <input class="form-control fc-datepicker" name="due_date" placeholder="YYYY-MM-DD"
                                        type="text" required
                                        value=" {{isset($invoice) ? $invoice->due_date : ''}}"
@@ -74,10 +82,10 @@
 
                         <div class="row">
                             <div class="col">
-                                <label for="inputName" class="control-label">القسم</label>
+                                <label for="inputName" class="control-label">{{__('section')}}</label>
                                 <select name="section_id" class="form-control SlectBox">
                                     <!--placeholder-->
-                                    <option value="" selected disabled>حدد القسم</option>
+                                    <option value="" selected disabled>{{__('choose section')}}</option>
                                     @foreach ($sections as $section)
                                         <option value="{{$section->id}}" {{ isset($invoice) ? $invoice->section_id == $section->id ? 'selected' : '' : '' }}> {{ $section->section_name }}</option>
                                     @endforeach
@@ -85,7 +93,7 @@
                             </div>
 
                             <div class="col">
-                                <label for="product" class="control-label">المنتج</label>
+                                <label for="product" class="control-label">{{__('product')}}</label>
                                 <select id="product_id" name="product_id" class="form-control">
                                     @if(isset($invoice))
                                         @foreach($products as $product)
@@ -97,7 +105,7 @@
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label">مبلغ التحصيل</label>
+                                <label for="inputName" class="control-label">{{__('Amount Collection')}}</label>
                                 <input type="text" class="form-control" id="inputName2" name="amount_collection"
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                        value=" {{isset($invoice) ? $invoice->amount_collection : ''}}"
@@ -112,7 +120,7 @@
                         <div class="row">
 
                             <div class="col">
-                                <label for="inputName" class="control-label">مبلغ العمولة</label>
+                                <label for="inputName" class="control-label">{{__('Amount Commission')}}</label>
                                 <input type="text" class="form-control form-control-lg" id="Amount_Commission"
                                        name="amount_commission" title="يرجي ادخال مبلغ العمولة "
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
@@ -123,7 +131,7 @@
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label">الخصم</label>
+                                <label for="inputName" class="control-label">{{__('discount')}}</label>
                                 <input type="text" class="form-control form-control-lg" id="discount" name="discount"
                                        title="يرجي ادخال مبلغ الخصم "
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
@@ -135,10 +143,10 @@
 
 
                             <div class="col">
-                                <label for="inputName" class="control-label">نسبة ضريبة القيمة المضافة</label>
+                                <label for="inputName" class="control-label">{{__('Value-added tax percentage')}}</label>
                                 <select name="rate_vat" id="rate_vat" class="form-control" onchange="myFunction()">
                                     <!--placeholder-->
-                                    <option value="" selected disabled>حدد نسبة الضريبة</option>
+                                    <option value="" selected disabled>{{__('specify percentage')}}</option>
                                     <option value="5%" {{isset($invoice) ? $invoice->rate_vat =='5%' ? 'selected' :'' :''  }}>5%</option>
                                     <option value="10%" {{isset($invoice) ? $invoice->rate_vat =='10%' ? 'selected' :'' :''  }}>10%</option>
                                 </select>
@@ -151,7 +159,7 @@
 
 
                             <div class="col">
-                                <label for="inputName" class="control-label">قيمة ضريبة القيمة المضافة</label>
+                                <label for="inputName" class="control-label">{{__('Value-added tax')}}</label>
                                 <input type="text" class="form-control" id="value_vat" name="value_vat" readonly
                                        value="{{isset($invoice) ? $invoice->value_vat : ''}}">
                                 <input type="hidden" name="id" value="{{isset($invoice) ? $invoice->id : ''}}">
@@ -160,7 +168,7 @@
 
 
                             <div class="col">
-                                <label for="inputName" class="control-label">الاجمالي شامل الضريبة</label>
+                                <label for="inputName" class="control-label">{{__('total with Value-added tax')}}</label>
                                 <input type="text" class="form-control" id="total" name="total" readonly
                                        value=" {{isset($invoice) ? $invoice->total : ''}}">
                             </div>
@@ -169,7 +177,7 @@
                         {{-- 5 --}}
                         <div class="row">
                             <div class="col">
-                                <label for="exampleTextarea">ملاحظات</label>
+                                <label for="exampleTextarea">{{__('notes')}}</label>
                                 <textarea class="form-control" id="exampleTextarea" name="note" rows="3">
                                     {{isset($invoice) ? $invoice->notes : ''}}
                                 </textarea>
@@ -177,8 +185,8 @@
                         </div>
                         <br>
 
-                        <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
-                        <h5 class="card-title">المرفقات</h5>
+                        <p class="text-danger">* {{__('attach extension')}} pdf, jpeg ,.jpg , png </p>
+                        <h5 class="card-title">{{__('attachments')}}</h5>
                         @if(isset($attachments))
                             @foreach($attachments as $attach)
                                 <h3 class="text-info">{{$attach->file_name}}</h3>
@@ -186,7 +194,7 @@
                             @endforeach
                         @endif
                         <div class="col-sm-12 col-md-12">
-                            <input name="photo" type="file" class="dropify" accept=".pdf,.jpg, .png, image/jpeg, image/png"
+                            <input name="file" type="file" class="dropify" accept=".pdf,.jpg, .png, image/jpeg, image/png"
                                    data-height="70"
 
                             value="">
@@ -195,7 +203,7 @@
                         </div>
                         <br>
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">حفظ البيانات</button>
+                            <button type="submit" class="btn btn-primary">{{__('save data')}}</button>
                         </div>
 
 
@@ -212,32 +220,20 @@
 tent closed -->
 @endsection
 @section('js')
-    <!-- Internal Select2 js-->
     <script src="{{ URL::asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-    <!--Internal Fileuploads js-->
     <script src="{{ URL::asset('assets/plugins/fileuploads/js/fileupload.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fileuploads/js/file-upload.js') }}"></script>
-    <!--Internal Fancy uploader js-->
     <script src="{{ URL::asset('assets/plugins/fancyuploder/jquery.ui.widget.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fancyuploder/jquery.fileupload.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fancyuploder/jquery.iframe-transport.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fancyuploder/jquery.fancy-fileupload.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/fancyuploder/fancy-uploader.js') }}"></script>
-    <!--Internal  Form-elements js-->
     <script src="{{ URL::asset('assets/js/advanced-form-elements.js') }}"></script>
     <script src="{{ URL::asset('assets/js/select2.js') }}"></script>
-    <!--Internal Sumoselect js-->
     <script src="{{ URL::asset('assets/plugins/sumoselect/jquery.sumoselect.js') }}"></script>
-    <!--Internal  Datepicker js -->
-{{--    <script src="{{ URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js') }}"></script>--}}
-    <!--Internal  jquery.maskedinput js -->
-{{--    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">--}}
-{{--    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>--}}
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="{{ URL::asset('assets/plugins/jquery.maskedinput/jquery.maskedinput.js') }}"></script>
-    <!--Internal  spectrum-colorpicker js -->
     <script src="{{ URL::asset('assets/plugins/spectrum-colorpicker/spectrum.js') }}"></script>
-    <!-- Internal form-elements js -->
     <script src="{{ URL::asset('assets/js/form-elements.js') }}"></script>
     <script src="{{ URL::asset('assets/js/date.js') }}"></script>
 
@@ -257,10 +253,10 @@ tent closed -->
             $('.fc-today').val($today);
             $('select[name="section_id"]').on('change', function () {
                 var SectionId = $(this).val();
-
+                let lang =  $(location).attr("href").split('\/')[3];
                 if (SectionId) {
                     $.ajax({
-                        url: "{{ URL::to('section') }}/" + SectionId,
+                        url: "/"+lang + '/section/' + SectionId,
                         type: "GET",
                         dataType: "json",
                         success: function (data) {

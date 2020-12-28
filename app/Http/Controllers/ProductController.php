@@ -44,7 +44,7 @@ class ProductController extends Controller
         $data->description=$request->description;
         $data->created_by=\Auth::user()->name;
         $data->save();
-        return redirect('products');
+        return redirect(app()->getLocale().'/products');
     }
 
     /**
@@ -82,7 +82,7 @@ class ProductController extends Controller
         $product->section_id= $request->section;
         $product->description= $request->description;
         $product->save();
-        return  redirect('products');
+        return  redirect(app()->getLocale().'products');
     }
 
     /**
@@ -94,7 +94,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect('products');
+        return redirect(app()->getLocale().'products');
 
     }
 }

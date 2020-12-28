@@ -10,8 +10,7 @@ use Illuminate\Notifications\Notifiable;
  * @method static where(string $string, $invoiceType)
  */
 class Invoice extends Model
-{    use SoftDeletes;
-    use Notifiable;
+{    use SoftDeletes , SoftDeletes , Notifiable;
 
 
     public function section(){
@@ -34,7 +33,7 @@ class Invoice extends Model
     }
 
     protected $guarded = [];
-    use SoftDeletes;
+
 
 
 

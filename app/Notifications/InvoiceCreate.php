@@ -31,7 +31,7 @@ class InvoiceCreate extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail','database'];
     }
 
     /**
@@ -47,29 +47,25 @@ class InvoiceCreate extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Invoice created')
             ->from('mhayad010@gmail.com', 'sayed')
+
             ->greeting('Hello!')
             ->line('One of your invoices has been added!')
             ->action('View Invoice', $url)
             ->line('Thank you for using our application!');
     }
-//    public function routeNotificationForMail($notification)
-//    {
-//        // Return email address only...
-//        return 'mh3yad@gmail.com';
-//
-//        // Return name and email address...
-//
-//    }
+
     /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
+        $url = url('/invoices/'.$this->invoice->id);
         return [
-            //
+            'invoice_id' => $this->invoice->id,
+            'url'=>$url
         ];
     }
 }

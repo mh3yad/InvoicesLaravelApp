@@ -13,8 +13,8 @@
     <div id="print" class="row row-sm" style="padding: 20px">
         <div class="col-md-12 col-xl-12">
             <div class=" main-content-body-invoice">
-                <div class="card card-invoice">
-                    <div class="card-body">
+                    <div class="card card-invoice">
+                        <div class="card-body">
                         <div class="invoice-header">
                             <h1 class="invoice-title">Invoice</h1>
                             <div class="billed-from">
@@ -48,10 +48,10 @@
                                 <thead>
                                 <tr>
                                     <th class="wd-20p">#</th>
-                                    <th class="wd-40p">product</th>
-                                    <th class="tx-center">Amount_collection</th>
-                                    <th class="tx-center">Amount_commission</th>
-                                    <th class="tx-right">Total</th>
+                                    <th class="wd-40p">{{__('product')}}</th>
+                                    <th class="tx-center">{{__('Amount_collection')}}</th>
+                                    <th class="tx-center">{{__('Amount_commission')}}</th>
+                                    <th class="tx-right">{{__('total')}}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -72,15 +72,15 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="tx-right">Tax {{$invoice->rate_vat}}</td>
+                                    <td class="tx-right">{{__('value vat')}} {{$invoice->rate_vat}}</td>
                                     <td class="tx-right" colspan="2">{{$invoice->value_vat}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="tx-right">Discount</td>
+                                    <td class="tx-right">{{__('discount')}}</td>
                                     <td class="tx-right" colspan="2"> ${{$invoice->discount}}</td>
                                 </tr>
                                 <tr>
-                                    <td class="tx-right tx-uppercase tx-bold tx-inverse">Total Due</td>
+                                    <td class="tx-right tx-uppercase tx-bold tx-inverse">{{__('total a')}}</td>
                                     <td class="tx-right" colspan="2">
                                         <h4 class="tx-primary tx-bold">${{$invoice->total}}</h4>
                                     </td>
@@ -91,7 +91,7 @@
                         <hr class="mg-b-40">
 
                         <a id="printPageButton" onclick="printFunc()" class="btn btn-danger float-left mt-3 mr-2">
-                            <i class="mdi mdi-printer ml-1"></i>Print
+                            <i class="mdi mdi-printer ml-1"></i>{{__('Print')}}
                         </a>
 
                     </div>

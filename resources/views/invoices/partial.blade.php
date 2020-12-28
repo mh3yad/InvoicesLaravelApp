@@ -61,7 +61,7 @@
         <div class="col">
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
-                    <a class="model-affect btn btn-sm btn-primary" href="{{route('invoices.create')}}">
+                    <a class="model-affect btn btn-sm btn-primary" href="{{route('invoices.create',app()->getLocale())}}">
                         <i style="font-weight: bold"> + اضافة فاتورة</i>
                     </a>
                 </div>
@@ -71,17 +71,18 @@
                             <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">رقم الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="border-bottom-0">المنتج</th>
-                                <th class="border-bottom-0">القسم</th>
-                                <th class="border-bottom-0">الخصم</th>
-                                <th class="border-bottom-0">نسبة الضريبة</th>
-                                <th class="border-bottom-0">قيمة الضريبة</th>
-                                <th class="border-bottom-0">الاجمالي</th>
-                                <th class="border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">العمليات</th>
+                                <th class="border-bottom-0">{{__('num')}}</th>
+                                <th class="border-bottom-0">{{__('date')}}</th>
+                                <th class="border-bottom-0">{{__('due date')}}</th>
+                                <th class="border-bottom-0">{{__('product')}}</th>
+                                <th class="border-bottom-0">{{__('section')}}</th>
+                                <th class="border-bottom-0">{{__('discount')}}</th>
+                                <th class="border-bottom-0">{{__('rate vat')}}</th>
+                                <th class="border-bottom-0">{{__('value vat')}}</th>
+                                <th class="border-bottom-0">{{__('total')}}</th>
+                                <th class="border-bottom-0">{{__('status')}}</th>
+                                <th class="border-bottom-0">{{__('controls')}}</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -92,34 +93,40 @@
                                     <td>{{$invoice->invoice_date}}</td>
                                     <td>{{$invoice->due_date}}</td>
                                     <td>{{$invoice->product_id}}<td>
-
-                                        <a href="{{route('invoices.show',$invoice->id)}}">
+                                        <a href="{{URL(app()->getLocale().'/invoices/'.$invoice->id)}}">
                                             {{$invoice->section->section_name}}
                                         </a>
-
                                     </td>
-
-                                    {{--                                        {{$invoice->section->section_name}}</td>--}}
                                     <td>{{$invoice->discount}}</td>
                                     <td>{{$invoice->rate_vat}}</td>
                                     <td>{{$invoice->value_vat}}</td>
                                     <td>{{$invoice->total}}</td>
-                                    <td><span class="text-info">{{$invoice->status->name}}</span></td>
                                     <td>
-                                        <div class="dropdown">
+                                        @if($invoice->status->value == 1)
+                                            <span class="text-danger">{{__('unpaid')}}</span>
+                                        @elseif($invoice->status->value == 2)
+                                            <span class="text-info">{{__('partial')}}</span>
+                                        @else
+                                            <span class="text-success">{{__('paid')}}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div>
                                             <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary"
-                                                    data-toggle="dropdown" type="button">Menu<i class="fas fa-caret-down ml-1"></i></button>
+                                                    data-toggle="dropdown" type="button">{{__('Menu')}}<i class="fas fa-caret-down ml-1"></i></button>
                                             <div class="dropdown-menu tx-13">
-                                                <a class="dropdown-item" href="{{route('invoices.edit',$invoice->id)}}">Edit</a>
-                                                <a class="dropdown-item" href="javascript:document.getElementById('delete_form').submit();">Delete</a>
-                                                <form method="POST" id="delete_form" action="{{route('invoices.destroy',$invoice->id)}}">
+                                                <a class="dropdown-item" href="{{route('invoices.edit',[app()->getLocale(),$invoice->id])}}">{{__('Edit')}}</a>
+                                                <a class="dropdown-item" href="{{route('status_show',[app()->getLocale(),$invoice->id])}}">{{__('change status')}}</a>
+                                                <a class="dropdown-item" href="javascript:document.getElementById('delete_form').submit();">{{__('Delete')}}</a>
+                                                <form method="POST" id="delete_form" action="{{route('invoices.destroy',[app()->getLocale(),$invoice->id])}}">
                                                     @method('DELETE')
                                                     @csrf
                                                 </form>
-                                                <a class="dropdown-item" href="javascript:document.getElementById('archive_form').submit();">Archive</a>
-                                                <form method="post" id="archive_form" action="{{route('archive',$invoice->id)}}"  >
+                                                <a class="dropdown-item" href="javascript:document.getElementById('archive_form').submit();">{{__('Archive')}}</a>
+                                                <form method="post" id="archive_form" action="{{route('archive',[app()->getLocale(),$invoice->id])}}"  >
                                                     @csrf
                                                 </form>
+                                                <a class="dropdown-item" href="{{URL(app()->getLocale()."/print/".$invoice->id)}}">{{__('Print')}}</a>
 
                                             </div>
                                         </div>

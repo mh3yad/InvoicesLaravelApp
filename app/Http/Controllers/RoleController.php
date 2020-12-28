@@ -38,7 +38,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-       $role = Role::updateOrCreate(
+        $request->validate([
+
+            'name'=>'required',
+        ]);
+
+        $role = Role::updateOrCreate(
            [
                'id'=>$request->id
            ],
@@ -58,7 +63,7 @@ class RoleController extends Controller
         }elseif($role->wasRecentlyCreated) {
             session()->flash('create', 'role has been added successfully');
         }
-        return redirect('roles');
+        return redirect(app()->getLocale().'/roles');
     }
 
     /**
@@ -67,10 +72,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role  $role)
+    public function show($d,Role  $role)
     {
         $permissions  = $role->getAllPermissions();
-//        dd($permissions);
         return view('roles.show',compact('role','permissions'));
     }
 
@@ -80,7 +84,7 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role  $role)
+    public function edit($d,Role  $role)
     {
         $permissions = Permission::all();
         return view('roles.create',compact('role','permissions'));
@@ -104,10 +108,10 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role  $role)
+    public function destroy($d,Role  $role)
     {
         $role->delete();
         session()->flash('delete','Role has been deleted successfully');
-        return  redirect('roles');
+        return  redirect(app()->getLocale().'/roles');
     }
 }

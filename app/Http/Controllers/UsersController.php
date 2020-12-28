@@ -42,9 +42,6 @@ class UsersController extends Controller
     public function index()
     {
         $users = User::with('roles')->get();
-
-
-//        dd(roles);
         return  view('users.index',compact('users'));
     }
 
@@ -53,7 +50,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($d)
     {
         $roles = Role::all();
         return view('users.create',compact('roles'));
@@ -67,7 +64,14 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required',
+            'status'=>'required',
+
+
+
+        ]);
         if($request->id){
             $user = User::where('id',$request->id)->update(
                 [
@@ -103,7 +107,7 @@ class UsersController extends Controller
             session()->flash('create','user created successfully');
         }
 
-         return redirect('users');
+         return redirect(app()->getLocale().'/users');
     }
 
     /**
@@ -123,10 +127,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit($d,User $user)
     {
         $roles = Role::all();
-        return  view('users.create',compact('user','roles'));
+        return view('users.create',compact('roles','user'));
     }
 
     /**
@@ -147,10 +151,10 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy($d,User $user)
     {
         $user->delete();
         session()->flash('delete','user has been deleted successfully');
-        return redirect('users');
+        return redirect(app()->getLocale().'users');
     }
 }

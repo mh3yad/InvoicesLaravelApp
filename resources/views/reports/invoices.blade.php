@@ -13,7 +13,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ قايمة الفواتير</span>
+                <h4 class="content-title mb-0 my-auto">{{__('Reports invoices')}}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
             </div>
         </div>
 
@@ -23,10 +23,12 @@
 @section('content')
         <div class="col">
             <div class="card mg-b-20 p-4">
-                <form action="" id="myForm" onsubmit="return false">
+
+                <form action="{{route('reportInvoiceRequests',app()->getLocale())}}" id="myForm" method="post">
+                    @csrf
                     <div class="card-header pb-0">
-                            <label  class="rdiobox"><input id="type" name="rdio" type="radio" checked> <span>Search by type</span></label>
-                            <label  class="rdiobox"><input id="number" name="rdio" type="radio"> <span>Search by number</span></label>
+                            <label  class="rdiobox"><input id="type" name="rdio" type="radio" checked> <span>{{__('Search by type')}}</span></label>
+                            <label  class="rdiobox"><input id="number" name="rdio" type="radio"> <span>{{__('Search by number')}}</span></label>
                     </div>
                     <br>
                     <br>
@@ -34,21 +36,21 @@
                     <div class="formType">
                         <div class="row">
                             <div class="col">
-                                <label for="inputName" class="control-label">type</label>
+                                <label for="inputName" class="control-label">{{__('type')}}</label>
                                 <select id="invoiceType" name="invoiceType" class="form-control ">
-                                    <option value="" disabled selected>choose type</option>
+                                    <option value="" disabled selected>{{__('choose type')}}</option>
                                     @foreach($status as $s)
                                         <option value="{{$s->value}}">{{$s->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col">
-                                <label>from date</label>
+                                <label>{{__('from date')}}</label>
                                 <input class="form-control fc-datepicker" name="from_date" placeholder="YYYY-MM-DD"
                                        type="text" >
                             </div>
                             <div class="col">
-                                <label>to date </label>
+                                <label>{{__('to date')}} </label>
                                 <input class="form-control fc-datepicker" name="to_date" placeholder="YYYY-MM-DD"
                                        type="text" >
                             </div>
@@ -57,92 +59,93 @@
                     <div class="row">
                         <div class="formNumber">
                             <div class="form-group">
-                                <lable>search with number</lable>
-                                <input id="invoiceNumber" name="invoiceNumber" type="text" class="form-control" placeholder="Enter invoice number">
+                                <lable>{{__('Search by number')}}</lable>
+                                <input id="invoiceNumber" name="invoiceNumber" type="text" class="form-control" >
                             </div>
                         </div>
                     </div>
                     <br>
                     <br>
                     <br>
-                    <input class="btn btn-primary w-25" type="submit" value="Search" id="search" name="search">
+                    <input class="btn btn-primary w-25" type="submit" value="Search" id="search" >
                 </form>
+                @if(isset($invoices))
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example1" class="table key-buttons text-md-nowrap">
                             <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">رقم الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="border-bottom-0">المنتج</th>
-                                <th class="border-bottom-0">القسم</th>
-                                <th class="border-bottom-0">الخصم</th>
-                                <th class="border-bottom-0">نسبة الضريبة</th>
-                                <th class="border-bottom-0">قيمة الضريبة</th>
-                                <th class="border-bottom-0">الاجمالي</th>
-                                <th class="border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">ملحظات</th>
+                                <th class="border-bottom-0">{{__('num')}}</th>
+                                <th class="border-bottom-0">{{__('date')}}</th>
+                                <th class="border-bottom-0">{{__('due date')}}</th>
+                                <th class="border-bottom-0">{{__('product')}}</th>
+                                <th class="border-bottom-0">{{__('section')}}</th>
+                                <th class="border-bottom-0">{{__('discount')}}</th>
+                                <th class="border-bottom-0">{{__('rate vat')}}</th>
+                                <th class="border-bottom-0">{{__('value vat')}}</th>
+                                <th class="border-bottom-0">{{__('total')}}</th>
+                                <th class="border-bottom-0">{{__('status')}}</th>
+                                <th class="border-bottom-0">{{__('controls')}}</th>
+
                             </tr>
                             </thead>
-                            <tbody id="tableBody">
-                            {{--                            @foreach($invoices as $invoice)--}}
-                            {{--                                <tr>--}}
-                            {{--                                    <td>{{$invoice->id}}</td>--}}
-                            {{--                                    <td>{{$invoice->invoice_number}}</td>--}}
-                            {{--                                    <td>{{$invoice->invoice_date}}</td>--}}
-                            {{--                                    <td>{{$invoice->due_date}}</td>--}}
-                            {{--                                    <td>{{$invoice->product_id}}<td>--}}
-                            {{--                                        <a href="{{route('invoices.show',$invoice->id)}}">--}}
-                            {{--                                            {{$invoice->section->section_name}}--}}
-                            {{--                                        </a>--}}
-                            {{--                                    </td>--}}
-                            {{--                                    <td>{{$invoice->discount}}</td>--}}
-                            {{--                                    <td>{{$invoice->rate_vat}}</td>--}}
-                            {{--                                    <td>{{$invoice->value_vat}}</td>--}}
-                            {{--                                    <td>{{$invoice->total}}</td>--}}
-                            {{--                                    <td>--}}
-                            {{--                                        @if($invoice->status->value == 1)--}}
-                            {{--                                            <span class="text-info">{{$invoice->status->name}}</span>--}}
-                            {{--                                        @elseif($invoice->status->value == 2)--}}
-                            {{--                                            <span class="text-danger">{{$invoice->status->name}}</span>--}}
-                            {{--                                        @else--}}
-                            {{--                                            <span class="text-success">{{$invoice->status->name}}</span>--}}
-                            {{--                                        @endif--}}
-                            {{--                                    </td>--}}
-                            {{--                                    <td>--}}
-                            {{--                                        <div class="dropdown">--}}
-                            {{--                                            <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary"--}}
-                            {{--                                                    data-toggle="dropdown" type="button">Menu<i class="fas fa-caret-down ml-1"></i></button>--}}
-                            {{--                                            <div class="dropdown-menu tx-13">--}}
-                            {{--                                                <a class="dropdown-item" href="{{route('invoices.edit',$invoice->id)}}">Edit</a>--}}
-                            {{--                                                <a class="dropdown-item" href="{{route('status_show',$invoice->id)}}">change status</a>--}}
-                            {{--                                                <a class="dropdown-item" href="javascript:document.getElementById('delete_form').submit();">Delete</a>--}}
-                            {{--                                                <form method="POST" id="delete_form" action="{{route('invoices.destroy',$invoice->id)}}">--}}
-                            {{--                                                    @method('DELETE')--}}
-                            {{--                                                    @csrf--}}
-                            {{--                                                </form>--}}
-                            {{--                                                <a class="dropdown-item" href="javascript:document.getElementById('archive_form').submit();">Archive</a>--}}
-                            {{--                                                <form method="post" id="archive_form" action="{{route('archive',$invoice->id)}}"  >--}}
-                            {{--                                                    @csrf--}}
-                            {{--                                                </form>--}}
-                            {{--                                                <a class="dropdown-item" href="/print/{{$invoice->id}}">Print</a>--}}
+                            <tbody>
+                            @foreach($invoices as $invoice)
+                                <tr>
+                                    <td>{{$invoice->id}}</td>
+                                    <td>{{$invoice->invoice_number}}</td>
+                                    <td>{{$invoice->invoice_date}}</td>
+                                    <td>{{$invoice->due_date}}</td>
+                                    <td>{{$invoice->product_id}}<td>
+                                        <a href="{{URL(app()->getLocale().'/invoices/'.$invoice->id)}}">
+                                            {{$invoice->section->section_name}}
+                                        </a>
+                                    </td>
+                                    <td>{{$invoice->discount}}</td>
+                                    <td>{{$invoice->rate_vat}}</td>
+                                    <td>{{$invoice->value_vat}}</td>
+                                    <td>{{$invoice->total}}</td>
+                                    <td>
+                                        @if($invoice->status->value == 1)
+                                            <span class="text-danger">{{__('unpaid')}}</span>
+                                        @elseif($invoice->status->value == 2)
+                                            <span class="text-info">{{__('partial')}}</span>
+                                        @else
+                                            <span class="text-success">{{__('paid')}}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <button aria-expanded="false" aria-haspopup="true" class="btn ripple btn-primary"
+                                                    data-toggle="dropdown" type="button">{{__('Menu')}}<i class="fas fa-caret-down ml-1"></i></button>
+                                            <div class="dropdown-menu tx-13">
+                                                <a class="dropdown-item" href="{{route('invoices.edit',[app()->getLocale(),$invoice->id])}}">{{__('Edit')}}</a>
+                                                <a class="dropdown-item" href="{{route('status_show',[app()->getLocale(),$invoice->id])}}">{{__('change status')}}</a>
+                                                <a class="dropdown-item" href="javascript:document.getElementById('delete_form').submit();">{{__('Delete')}}</a>
+                                                <form method="POST" id="delete_form" action="{{route('invoices.destroy',[app()->getLocale(),$invoice->id])}}">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                </form>
+                                                <a class="dropdown-item" href="javascript:document.getElementById('archive_form').submit();">{{__('Archive')}}</a>
+                                                <form method="post" id="archive_form" action="{{route('archive',[app()->getLocale(),$invoice->id])}}"  >
+                                                    @csrf
+                                                </form>
+                                                <a class="dropdown-item" href="{{URL(app()->getLocale()."/print/".$invoice->id)}}">{{__('Print')}}</a>
 
-                            {{--                                            </div>--}}
-                            {{--                                        </div>--}}
-
-
-                            {{--                                    </td>--}}
+                                            </div>
+                                        </div>
 
 
-                            {{--                                </tr>--}}
-                            {{--                            @endforeach--}}
+                                    </td>
+
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
-
                     </div>
                 </div>
+                @endif
             </div>
         </div>
         </div>
@@ -162,43 +165,7 @@
             })
             $('form#myForm').serialize()
 
-            $('#search').click(function () {
-                $status = $('#invoiceType').val()
-                $('#tableBody').html("")
-                console.log($('form#myForm').serialize())
 
-               {
-                    $.ajax({
-                        url: "/reportInvoiceRequest",
-                        type: "GET",
-                        data: $('form#myForm').serialize(),
-                        dataType: "json",
-
-                        success: function (data) {
-                            $.each(data,function (key,value){
-                                $('#tableBody').append('<tr class="text-center">' +
-                                    '<td>'+value.id+'</td>' +
-                                    '<td>'+value.invoice_number+'</td>' +
-                                    '<td>'+value.invoice_date+'</td>' +
-                                    '<td>'+value.due_date+'</td>' +
-                                    '<td>'+value.product_id+'</td>' +
-                                    '<td>'+value.section_id+'</td>' +
-                                    '<td>'+value.discount+'</td>' +
-                                    '<td>'+value.rate_vat+'</td>' +
-                                    '<td>'+value.value_vat+'</td>' +
-                                    '<td>'+value.total+'</td>' +
-                                    '<td>'+(value.status_id === 1 ? '<span class="text-danger">unpaid </span> ' : value.status_id === 2 ?  '<span class="text-info">partial</span>' : '<span class="text-success">paid </span>')+'</td>' +
-
-
-                                    '</tr>')
-                            })
-                        },
-                    });
-
-                }
-                $(this).closest('form').find("input[type=text], textarea").val("");
-
-            });
 
         });
 

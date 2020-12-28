@@ -19,7 +19,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الاعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ الأقسام</span>
+                <h4 class="content-title mb-0 my-auto">{{__('settings')}}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{__('sections')}}</span>
             </div>
         </div>
     </div>
@@ -49,26 +49,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
-                    <h6 class="modal-title">اضافة قسم</h6>
+                    <h6 class="modal-title">{{__('add section')}}</h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
-                <form action="{{route('sections.store')}}" method="POST">
+                <form action="{{route('sections.store',app()->getLocale())}}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div>
 
-                            <label for="">اسم القسم</label>
-                            <input type="text" placeholder="ادخل اسم القسم " name="section_name" class="form-control" required>
-                            <label for="">ملاحظات</label>
-                            <textarea placeholder="ادخل الملاحظات " name="description" class="form-control"></textarea>
+                            <label for="">{{__('section name')}}</label>
+                            <input type="text"  name="section_name" class="form-control" required>
+                            <label for="">{{__('notes')}}</label>
+                            <textarea  name="description" class="form-control"></textarea>
 
 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn ripple btn-primary" type="submit">اضافة</button>
-                        <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">الغاء</button>
+                        <button class="btn ripple btn-primary" type="submit">{{__('add')}}</button>
+                        <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">{{__('cancel')}}</button>
                     </div>
                 </form>
             </div>
@@ -82,8 +82,7 @@
                     <div>
 
                     </div>
-                    <a class="btn ripple btn-success" data-target="#modaldemo1" data-toggle="modal" href="">اضافة
-                        قسم</a>
+                    <a class="btn ripple btn-success" data-target="#modaldemo1" data-toggle="modal" href="">{{__('add section')}}</a>
                 </div>
             </div>
         </div>
@@ -102,9 +101,9 @@
                             <thead>
                             <tr>
                                 <th  style="width: 60px">#</th>
-                                <th class="wd-15p border-bottom-0">اسم القسم</th>
-                                <th class="wd-15p border-bottom-0">الوصف</th>
-                                <th class="wd-15p border-bottom-0">العمليات</th>
+                                <th class="wd-15p border-bottom-0">{{__('section')}}</th>
+                                <th class="wd-15p border-bottom-0">{{__('description')}}</th>
+                                <th class="wd-15p border-bottom-0">{{__('controls')}}</th>
 
                             </tr>
                             </thead>
@@ -122,27 +121,29 @@
                                                         <div class="modal-dialog" role="document">
                                                             <div class="modal-content modal-content-demo">
                                                                 <div class="modal-header">
-                                                                    <h6 class="modal-title">تعديل  القسم</h6>
+                                                                    <h6 class="modal-title">{{__('edit section')}}</h6>
                                                                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                                                                             aria-hidden="true">&times;</span></button>
                                                                 </div>
-                                                                <form action="{{route('sections.update',$section->id)}}" method="POST">
+                                                                <form action="{{route('sections.update',[$section->id,app()->getLocale()])}}" method="POST">
                                                                     @method("PUT")
                                                                     @csrf
                                                                     <div class="modal-body">
                                                                         <div>
 
-                                                                            <label for="">اسم القسم</label>
-                                                                            <input type="text" value="{{$section->section_name}}" placeholder="ادخل اسم القسم " name="section_name" class="form-control">
-                                                                            <label for="">ملاحظات</label>
-                                                                            <textarea value="" placeholder="ادخل الملاحظات " name="description" class="form-control">{{$section->description}}</textarea>
+                                                                            <label for="">{{__('section')}}</label>
+                                                                            <input type="text" value="{{$section->section_name}}"  name="section_name" class="form-control">
+                                                                            <label for="">{{__('notes')}}</label>
+                                                                            <textarea value="" name="description" class="form-control">{{$section->description}}</textarea>
 
 
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button class="btn ripple btn-primary" type="submit">تعديل</button>
-                                                                        <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">الغاء</button>
+                                                                        <button class="btn ripple btn-primary" type="submit">
+                                                                            {{__('edit')}}</button>
+                                                                        <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">
+                                                                            {{__('cancel')}}</button>
                                                                     </div>
                                                                 </form>
                                                             </div>
@@ -150,14 +151,14 @@
                                                     </div>
                                                     <a  data-target="#modaldemo2"
                                                         data-toggle="modal" href="">
-                                                        <button class="btn-sm btn-primary"> تعديل</button>
+                                                        <button class="btn-sm btn-primary"> {{__('edit')}}</button>
                                                     </a>
                                                 </div>
                                                 <div class="mr-2">
-                                                    <form action="{{route('sections.destroy',$section->id)}}" method="POST">
+                                                    <form action="{{route('sections.destroy',[$section->id,app()->getLocale()])}}" method="POST">
                                                         @method('DELETE')
                                                         @csrf
-                                                        <button class="btn-sm btn-danger ml-2" type="submit">حذف</button>
+                                                        <button class="btn-sm btn-danger ml-2" type="submit">{{__('delete')}}</button>
                                                     </form>
                                                 </div>
                                             </div>

@@ -45,11 +45,10 @@
                     <div class="tabs-menu1">
                         <!-- Tabs -->
                         <ul class="nav panel-tabs main-nav-line">
-                            <li class="nav-item"><a href="#tab4" class="nav-link  active" data-toggle="tab">معلومات
-                                    الفاتورة</a></li>
-                            <li class="nav-item"><a href="#tab5" class="nav-link " data-toggle="tab">حالات الفاتورة</a>
+                            <li class="nav-item"><a href="#tab4" class="nav-link  active" data-toggle="tab">{{__('invoice details')}}</a></li>
+                            <li class="nav-item"><a href="#tab5" class="nav-link " data-toggle="tab">{{__('invoices statuses')}}</a>
                             </li>
-                            <li class="nav-item"><a href="#tab6" class="nav-link " data-toggle="tab">المرفقات</a></li>
+                            <li class="nav-item"><a href="#tab6" class="nav-link " data-toggle="tab">{{__('attachments')}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -61,17 +60,17 @@
                                     <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">رقم الفاتورة</th>
-                                        <th class="border-bottom-0">تاريخ الفاتورة</th>
-                                        <th class="border-bottom-0">تاريخ الاستحقاق</th>
-                                        <th class="border-bottom-0">المنتج</th>
-                                        <th class="border-bottom-0">القسم</th>
-                                        <th class="border-bottom-0">الخصم</th>
-                                        <th class="border-bottom-0">نسبة الضريبة</th>
-                                        <th class="border-bottom-0">قيمة الضريبة</th>
-                                        <th class="border-bottom-0">الاجمالي</th>
-                                        <th class="border-bottom-0">الحالة</th>
-                                        <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0">{{__('num')}}</th>
+                                        <th class="border-bottom-0">{{__('date')}}</th>
+                                        <th class="border-bottom-0">{{__('due date')}}</th>
+                                        <th class="border-bottom-0">{{__('product')}}</th>
+                                        <th class="border-bottom-0">{{__('section')}}</th>
+                                        <th class="border-bottom-0">{{__('discount')}}</th>
+                                        <th class="border-bottom-0">{{__('rate vat')}}</th>
+                                        <th class="border-bottom-0">{{__('value vat')}}</th>
+                                        <th class="border-bottom-0">{{__('total')}}</th>
+                                        <th class="border-bottom-0">{{__('status')}}</th>
+                                        <th class="border-bottom-0">{{__('controls')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -107,11 +106,13 @@
                                     <thead>
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">رقم الفاتورة</th>
-                                        <th class="border-bottom-0">تاريخ الاضافة</th>
-                                        <th class="border-bottom-0">الحالة</th>
-                                        <th class="border-bottom-0">المستخدم</th>
-                                        <th class="border-bottom-0">ملاحظات</th>
+                                        <th class="border-bottom-0">#</th>
+                                        <th class="border-bottom-0">{{__('num')}}</th>
+                                        <th class="border-bottom-0">{{__('date')}}</th>
+                                        <th class="border-bottom-0">{{__('status')}}</th>
+                                        <th class="border-bottom-0">{{__('controls')}}</th>
+                                        <th class="border-bottom-0">{{__('user')}}</th>
+                                        <th class="border-bottom-0">{{__('notes')}}</th>
                                     </tr>
                                     </thead>
                                     <?php $i =1?>
@@ -124,12 +125,12 @@
                                             <td>{{$detail->invoice_number}}</td>
                                             <td>{{$detail->created_at}}</td>
                                             <td>
-                                                @if($detail->status->value == 1)
-                                                    <span class="text-info">{{$detail->status->name}}</span>
-                                                @elseif($detail->status->value == 2)
-                                                    <span class="text-danger">{{$detail->status->name}}</span>
+                                                @if($invoice->status->value == 1)
+                                                    <span class="text-danger">{{__('unpaid')}}</span>
+                                                @elseif($invoice->status->value == 2)
+                                                    <span class="text-info">{{__('partial')}}</span>
                                                 @else
-                                                    <span class="text-success">{{$detail    ->status->name}}</span>
+                                                    <span class="text-success">{{__('paid')}}</span>
                                                 @endif
                                             </td>
                                             <td>{{$detail->user}}</td>
@@ -156,9 +157,9 @@
                             <br>
                             <div class="row">
                                 <div class="col">
-                                    <p class="text-danger">* صيغة المرفق pdf, jpeg ,.jpg , png </p>
-                                    <h5 class="card-title">اضافة مرفق</h5>
-                                    <form action="{{route('addAttachment')}}" method="POST" enctype="multipart/form-data">
+                                    <p class="text-danger">* {{__('attach extension')}} pdf, jpeg ,.jpg , png </p>
+                                    <h5 class="card-title">{{__('add attachment')}}</h5>
+                                    <form action="{{route('addAttachment',app()->getLocale())}}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="col-sm-12 col-md-12 w-25">
                                             <input name="file_name" type="file" class="dropify" accept=".pdf,.jpg, .png, image/jpeg, image/png"
@@ -169,7 +170,7 @@
                                         </div>
                                         <br>
                                         <div class="d-flex ">
-                                            <button type="submit" class="btn btn-primary">اضافة</button>
+                                            <button type="submit" class="btn btn-primary">{{__('add')}}</button>
                                         </div>
                                     </form>
                                 </div>
@@ -182,12 +183,12 @@
                             <br>
                             <div class="table-responsive">
 
-                                <table id="example1" class="table key-buttons text-md-nowrap">
-                                    <thead>
+                                <table id="example1" class="table  key-buttons text-md-nowrap">
+                                    <thead >
                                     <tr>
                                         <th class="border-bottom-0">#</th>
-                                        <th class="border-bottom-0">اسم المرفق</th>
-                                        <th class="border-bottom-0">العمليات</th>
+                                        <th class="border-bottom-0">{{__('attachment name')}}</th>
+                                        <th class="border-bottom-0">{{__('controls')}}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -202,12 +203,12 @@
 
                                                       <a class="btn btn-outline-success" href="javascript:document.getElementById('download').submit()">
                                                           <i class="far fa-arrow-alt-circle-down"></i>  Download
-                                                          <form method="post" action="{{route('download',[$invoice->invoice_number,$attachment->file_name])}}" id="download">
+                                                          <form method="post" action="{{route('download',[$invoice->invoice_number,$attachment->file_name,app()->getLocale()])}}" id="download">
                                                               @csrf
                                                           </form>
                                                       </a>
 
-                                                      <a  class="btn btn-outline-info mx-4" href="{{asset('/Attachments'.'/'.$invoice->invoice_number."/" . $attachment->file_name)}}" target="_blank" >
+                                                      <a  class="btn btn-outline-info mx-4" href="{{asset(app()->getLocale().'/Attachments'.'/'.$invoice->invoice_number."/" . $attachment->file_name)}}" target="_blank" >
                                                           <i class="far fa-eye"></i>     show
                                                       </a>
 
@@ -225,7 +226,7 @@
                                                                   <a href="javascript:document.getElementById('delete').submit()" class="btn btn-outline-danger">
                                                                       <i class='far fa-trash-alt'></i>Delete
                                                                   </a>
-                                                                  <form id="delete" class="text-left pos" action="{{route('delete',[$attachment->id,$invoice->invoice_number])}}">
+                                                                  <form id="delete" class="text-left pos" action="{{route('delete',[$attachment->id,$invoice->invoice_number,app()->getLocale()])}}">
                                                                   </form>
                                                                   <button class="btn btn-dark" data-dismiss="modal" type="button">Close</button>
                                                               </div>

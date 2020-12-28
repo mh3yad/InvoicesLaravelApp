@@ -11,8 +11,9 @@
     <!--Internal  TelephoneInput css-->
     <link rel="stylesheet" href="{{ URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css') }}">
 @endsection
+
 @section('title')
-    {{isset($invoice) ? 'تعديل الفاتورة' : 'اضافة فاتورة'}}
+    {{isset($invoice) ? __('Edit Invoice') : __('Add Invoice')}}
 @stop
 
 @section('page-header')
@@ -20,14 +21,23 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                   {{isset($invoice) ? 'تعديل الفاتورة' : 'اضافة فاتورة'}}</span>
+                <h4 class="content-title mb-0 my-auto">{{__('Invoices')}}</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                   {{isset($invoice) ? __('Edit Invoice') : __('Add Invoice')}}</span>
             </div>
         </div>
     </div>
     <!-- breadcrumb -->
 @endsection
 @section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- row -->
     <div class="row">
 
@@ -35,7 +45,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    <form action="{{route('status_update',$invoice->id)}}" method="post" enctype="multipart/form-data"
+                    <form action="{{route('status_update',[app()->getLocale(),$invoice->id])}}" method="post" enctype="multipart/form-data"
                           autocomplete="off">
                         {{ csrf_field() }}
 
@@ -44,7 +54,7 @@
                         <div class="row">
 
                             <div class="col">
-                                <label for="inputName" class="control-label">رقم الفاتورة</label>
+                                <label for="inputName" class="control-label">{{__('number')}}</label>
                                 <input type="text" class="form-control" id="inputName" name="invoice_number"
                                        title="يرجي ادخال رقم الفاتورة"
                                        value="{{$invoice->invoice_number}}"  readonly
@@ -52,7 +62,7 @@
                             </div>
 
                             <div class="col">
-                                <label>تاريخ الفاتورة</label>
+                                <label>{{__('date')}}</label>
                                 <input class="form-control fc-datepicker fc-today" name="invoice_date" placeholder="YYYY-MM-DD"
                                        type="text" readonly
                                        value="{{$invoice->invoice_date}}"
@@ -60,7 +70,7 @@
                             </div>
 
                             <div class="col">
-                                <label>تاريخ الاستحقاق</label>
+                                <label>{{__('due date')}}</label>
                                 <input class="form-control fc-datepicker" name="due_date" placeholder="YYYY-MM-DD"
                                        type="text" readonly
                                        value="{{$invoice->due_date}}"
@@ -74,7 +84,7 @@
 
                         <div class="row">
                             <div class="col">
-                                <label for="inputName" class="control-label">القسم</label>
+                                <label for="inputName" class="control-label">{{__('section')}}</label>
                                 <select id="inputName" name="section_id" class="form-control" readonly>
                                     <!--placeholder-->
                                         <option value="{{$invoice->section_id}}"   selected    > {{ $invoice->section->section_name }}</option>
@@ -82,7 +92,7 @@
                             </div>
 
                             <div class="col">
-                                <label for="product_id" class="control-label">المنتج</label>
+                                <label for="product_id" class="control-label">{{__('product')}}</label>
                                 <select id="product_id" name="product_id" class="form-control" readonly>
                                     <option value="{{$invoice->product_id}}"   selected   > {{ $invoice->product->product_name }}</option>
 
@@ -90,7 +100,7 @@
                             </div>
 
                             <div class="col">
-                                <label for="inputName" class="control-label">مبلغ التحصيل</label>
+                                <label for="inputName" class="control-label">{{__('s')}}</label>
                                 <input type="text" class="form-control" id="inputName2" name="amount_collection"
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                        value="{{$invoice->amount_collection}}

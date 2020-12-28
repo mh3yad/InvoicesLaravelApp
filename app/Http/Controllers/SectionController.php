@@ -46,7 +46,7 @@ class SectionController extends Controller
         $data->created_by=\Auth::user()->name;
         $data->save();
         session()->flash('success','section has been created successfully');
-        return redirect('sections');
+        return redirect(app()->getLocale().'sections');
     }
 
     /**
@@ -83,7 +83,7 @@ class SectionController extends Controller
         $section->section_name= $request->section_name;
         $section->description= $request->description;
         $section->save();
-        return  redirect('sections');
+        return  redirect(app()->getLocale().'sections');
     }
 
     /**
@@ -95,7 +95,7 @@ class SectionController extends Controller
     public function destroy(Section $section)
     {
         $section->delete();
-        return redirect('sections');
+        return redirect(app()->getLocale().'sections');
 
     }
 }
